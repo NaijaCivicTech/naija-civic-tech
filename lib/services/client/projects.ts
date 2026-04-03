@@ -5,6 +5,7 @@ import type {
   CreateListingBody,
   CreateListingPayload,
   PipelineStage,
+  ProjectComment,
   TeamRole,
 } from "@/data/types";
 
@@ -40,6 +41,8 @@ export const civicProjectKeys = {
     [...civicProjectKeys.all, "home-pipeline", viewerKey] as const,
   detail: (viewerKey: string, id: string) =>
     [...civicProjectKeys.all, "detail", viewerKey, id] as const,
+  comments: (projectId: string) =>
+    [...civicProjectKeys.all, "comments", projectId] as const,
 };
 
 export async function fetchProjectsStats(): Promise<CivicProjectsStatsDto> {
@@ -85,6 +88,55 @@ export async function fetchProjectsListPage(params: {
     nextCursor: data.nextCursor ?? null,
     ...(typeof data.total === "number" ? { total: data.total } : {}),
   };
+}
+
+export async function fetchProjectCommentsPage(
+  projectId: string,
+  cursor?: string | null,
+  limit = 30,
+): Promise<{ comments: ProjectComment[]; nextCursor: string | null }> {
+  const sp = new URLSearchParams();
+  sp.set("limit", String(limit));
+  if (cursor) sp.set("cursor", cursor);
+  const res = await fetch(`/api/projects/${projectId}/comments?${sp}`, {
+    credentials: "include",
+  });
+  const data = (await res.json()) as {
+    comments?: ProjectComment[];
+    nextCursor?: string | null;
+    error?: string;
+  };
+  if (!res.ok) {
+    throw new Error(data.error ?? `Failed to load comments (${res.status})`);
+  }
+  if (!Array.isArray(data.comments)) {
+    throw new Error("Invalid comments response");
+  }
+  return {
+    comments: data.comments,
+    nextCursor: data.nextCursor ?? null,
+  };
+}
+
+export async function postProjectComment(
+  projectId: string,
+  body: string,
+): Promise<ProjectComment> {
+  const res = await fetch(`/api/projects/${projectId}/comments`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify({ body }),
+  });
+  const data = (await res.json()) as {
+    comment?: ProjectComment;
+    error?: string;
+  };
+  if (!res.ok) {
+    throw new Error(data.error ?? `Failed to post (${res.status})`);
+  }
+  if (!data.comment) throw new Error("Invalid response");
+  return data.comment;
 }
 
 export async function fetchProjectById(id: string): Promise<CivicProject> {

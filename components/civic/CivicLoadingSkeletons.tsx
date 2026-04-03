@@ -207,3 +207,85 @@ export function DirectoryBoardSkeleton({
     </div>
   );
 }
+
+/** Matches project detail modal layout in CivicModals (header, body, tags, discussion). */
+export function ProjectDetailModalSkeleton() {
+  return (
+    <div aria-busy='true' aria-label='Loading project'>
+      <div className='mb-6 flex gap-4 border-b border-line pb-6'>
+        <div
+          className={cn(
+            "size-[52px] shrink-0 rounded-[10px] border border-line",
+            pulse,
+          )}
+        />
+        <div className='min-w-0 flex-1 space-y-3'>
+          <div className={cn("h-5 w-[72%] max-w-md rounded", pulse)} />
+          <div className='flex w-full items-center justify-between gap-3'>
+            <div className={cn("h-2.5 w-24 rounded", pulse)} />
+            <div className='flex min-w-0 items-center justify-end gap-2'>
+              <div className={cn("size-5 shrink-0 rounded-full", pulse)} />
+              <div className={cn("h-2.5 w-20 rounded", pulse)} />
+            </div>
+          </div>
+          <div className='rounded-lg border border-line bg-paper px-4 py-3'>
+            <div className={cn("mb-2 h-2.5 w-16 rounded", pulse)} />
+            <div className='space-y-1.5'>
+              <div className={cn("h-3 w-full rounded", pulse)} />
+              <div className={cn("h-3 w-[92%] rounded", pulse)} />
+            </div>
+          </div>
+          <div className={cn("h-2.5 w-28 rounded", pulse)} />
+          <div className='space-y-2'>
+            <div className={cn("h-3 w-full rounded", pulse)} />
+            <div className={cn("h-3 w-full rounded", pulse)} />
+            <div className={cn("h-3 w-[88%] rounded", pulse)} />
+            <div className={cn("h-3 w-[64%] rounded", pulse)} />
+          </div>
+          <div className='flex flex-wrap gap-1.5 pt-0.5'>
+            <div className={cn("h-5 w-20 rounded-full", pulse)} />
+            <div className={cn("h-5 w-16 rounded-full", pulse)} />
+            <div className={cn("h-5 w-24 rounded-full", pulse)} />
+          </div>
+        </div>
+      </div>
+      <div className='border-t border-line pt-6'>
+        <div className={cn("mb-4 h-2.5 w-24 rounded", pulse)} />
+        <div
+          className={cn(
+            "mb-2 h-[88px] w-full rounded-md border border-line",
+            pulse,
+          )}
+        />
+        <div className='flex justify-end'>
+          <div className={cn("h-9 w-28 rounded-md", pulse)} />
+        </div>
+        <div className='mt-6 flex flex-col gap-4'>
+          <div className='rounded-lg border border-line bg-paper px-3.5 py-3'>
+            <div className='mb-2 flex items-center gap-2'>
+              <div className={cn("size-[18px] shrink-0 rounded-full", pulse)} />
+              <div className='space-y-1'>
+                <div className={cn("h-3 w-28 rounded", pulse)} />
+                <div className={cn("h-2 w-20 rounded", pulse)} />
+              </div>
+            </div>
+            <div className='space-y-1.5'>
+              <div className={cn("h-3 w-full rounded", pulse)} />
+              <div className={cn("h-3 w-[90%] rounded", pulse)} />
+            </div>
+          </div>
+          <div className='rounded-lg border border-line bg-paper px-3.5 py-3'>
+            <div className='mb-2 flex items-center gap-2'>
+              <div className={cn("size-[18px] shrink-0 rounded-full", pulse)} />
+              <div className='space-y-1'>
+                <div className={cn("h-3 w-24 rounded", pulse)} />
+                <div className={cn("h-2 w-16 rounded", pulse)} />
+              </div>
+            </div>
+            <div className={cn("h-3 w-4/5 rounded", pulse)} />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

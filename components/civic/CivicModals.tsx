@@ -1,6 +1,8 @@
 "use client";
 
 import { AuthorAvatar } from "@/components/civic/AuthorAvatar";
+import { ProjectDetailModalSkeleton } from "@/components/civic/CivicLoadingSkeletons";
+import { ProjectCommentsSection } from "@/components/civic/ProjectCommentsSection";
 import type { CivicProject, ListingStatus, TeamRole } from "@/data/types";
 import {
   useJoinTeamMutation,
@@ -714,9 +716,7 @@ export function CivicModals() {
                     <button
                       type='button'
                       className='mt-2 cursor-pointer rounded-md border border-dashed border-line bg-transparent px-3 py-2 font-sans text-[12px] font-medium text-muted transition-colors hover:border-brand hover:text-brand'
-                      onClick={() =>
-                        ideaCriteriaFields.append({ text: "" })
-                      }
+                      onClick={() => ideaCriteriaFields.append({ text: "" })}
                     >
                       + Add criterion
                     </button>
@@ -757,9 +757,7 @@ export function CivicModals() {
                       {...ideaForm.register("urgency")}
                     >
                       <option value=''>Select…</option>
-                      <option value='critical'>
-                        Critical: lives at stake
-                      </option>
+                      <option value='critical'>Critical: lives at stake</option>
                       <option value='high'>
                         High: widespread daily impact
                       </option>
@@ -887,9 +885,7 @@ export function CivicModals() {
                 ✕
               </button>
               {projectDetailLoading ? (
-                <div className='py-16 text-center text-sm text-muted'>
-                  Loading project…
-                </div>
+                <ProjectDetailModalSkeleton />
               ) : projectDetailError ? (
                 <div className='py-8 text-center text-sm text-flame'>
                   {projectDetailErr instanceof Error
@@ -897,237 +893,242 @@ export function CivicModals() {
                     : "Could not load project."}
                 </div>
               ) : projectModalProject ? (
-              <>
-              <div className='mb-6 flex gap-4 border-b border-line pb-6'>
-                <div className='flex size-[52px] shrink-0 items-center justify-center rounded-[10px] border border-line bg-paper text-2xl'>
-                  {projectModalProject.icon}
-                </div>
-                <div className='min-w-0 flex-1'>
-                  <h3
-                    id='project-detail-title'
-                    className='mb-1 font-display text-lg font-bold'
-                  >
-                    {projectModalProject.name}
-                  </h3>
-                  <div className='mb-2 flex w-full items-center justify-between gap-3 text-[10px]'>
-                    <span className='shrink-0 font-medium uppercase tracking-wider text-muted'>
-                      Posted {formatPostedAt(projectModalProject.postedAt)}
-                    </span>
-                    <div className='flex min-w-0 max-w-[55%] items-center justify-end gap-2 sm:max-w-[60%]'>
-                      <AuthorAvatar
-                        name={projectModalProject.authorName}
-                        color={projectModalProject.authorColor}
-                        image={projectModalProject.authorImage}
-                        size='md'
-                      />
-                      <span
-                        className='min-w-0 truncate text-right font-medium text-ink/80'
-                        title={projectModalProject.authorName}
-                      >
-                        {projectModalProject.authorName}
-                      </span>
-                    </div>
-                  </div>
-                  {projectModalProject.request?.trim() ? (
-                    <div className='mb-4 rounded-lg border border-line bg-paper px-4 py-3'>
-                      <h4 className='mb-1.5 text-[11px] font-semibold uppercase tracking-[0.09em] text-muted'>
-                        Request
-                      </h4>
-                      <p className='text-[13px] leading-relaxed text-ink'>
-                        {projectModalProject.request.trim()}
-                      </p>
-                    </div>
-                  ) : null}
-                  {projectModalProject.request?.trim() ? (
-                    <p className='mb-1 text-[10px] font-semibold uppercase tracking-wider text-muted'>
-                      Proposed approach
-                    </p>
-                  ) : null}
-                  <p className='text-xs leading-snug text-muted'>
-                    {projectModalProject.description}
-                  </p>
-                  <div className='mt-2 flex flex-wrap gap-1.5'>
-                    <span className='rounded-full border border-line bg-transparent px-[7px] py-0.5 text-[9px] font-semibold uppercase tracking-wide text-muted'>
-                      {projectModalProject.category}
-                    </span>
-                    {projectModalProject.verified ? (
-                      <span className='inline-flex items-center gap-1 rounded-full border border-brand/20 bg-brand-soft px-2 py-0.5 text-[10px] font-semibold text-brand'>
-                        ✓ Verified
-                      </span>
-                    ) : null}
-                    {projectModalProject.pipelineStage ? (
-                      <span className='rounded-full border border-line bg-paper px-[7px] py-0.5 text-[9px] font-semibold uppercase tracking-wide text-muted'>
-                        {pipelineStageLabel(projectModalProject.pipelineStage)}
-                      </span>
-                    ) : null}
-                  </div>
-                </div>
-              </div>
-              {projectModalProject.criteria &&
-              projectModalProject.criteria.length > 0 ? (
-                <div className='mb-6 rounded-lg border border-line bg-paper px-5 py-4'>
-                  <h4 className='mb-3 text-[11px] font-semibold uppercase tracking-[0.09em] text-muted'>
-                    Acceptance Criteria
-                  </h4>
-                  <div className='flex flex-col gap-1.5'>
-                    {projectModalProject.criteria.map((c) => (
-                      <div
-                        key={c}
-                        className='flex gap-2 text-xs leading-snug text-ink'
-                      >
-                        <span className='mt-px shrink-0 text-[13px] text-brand'>
-                          ✓
-                        </span>
-                        {c}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ) : null}
-              {showTeamJoin ? (
                 <>
-                  <div className='mb-6'>
-                    <h4 className='mb-3 text-[11px] font-semibold uppercase tracking-[0.09em] text-muted'>
-                      Current Team ({projectModalProject.teams.length})
-                    </h4>
-                    {projectModalProject.teams.length > 0 ? (
-                      <div className='flex flex-col gap-2'>
-                        {projectModalProject.teams.map((m) => (
-                          <div
-                            key={m.userId}
-                            className='flex items-center justify-between rounded-md border border-line bg-paper px-3 py-2'
-                          >
-                            <div className='flex items-center gap-2'>
-                              {m.image ? (
-                                // eslint-disable-next-line @next/next/no-img-element -- remote Google avatars
-                                <img
-                                  src={m.image}
-                                  alt=''
-                                  className='size-7 shrink-0 rounded-full object-cover'
-                                />
-                              ) : (
-                                <div
-                                  className='flex size-7 shrink-0 items-center justify-center rounded-full text-[11px] font-bold text-white'
-                                  style={{ background: m.color }}
-                                >
-                                  {initials(m.name)}
-                                </div>
-                              )}
-                              <div>
-                                <div className='text-[13px] font-medium'>
-                                  {m.name}
-                                </div>
-                                <div className='text-[11px] text-muted'>
-                                  {m.role}
-                                </div>
-                              </div>
-                            </div>
-                            <span
-                              className={cn(
-                                "rounded-full px-2 py-0.5 text-[10px] font-medium",
-                                ROLE_TAG_TW[m.role] ?? ROLE_TAG_TW.Domain,
-                              )}
-                            >
-                              {m.role}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <div className='rounded-md border border-dashed border-line-strong bg-paper px-6 py-6 text-center text-[13px] text-muted'>
-                        No team members yet. Be the first to join!
-                      </div>
-                    )}
-                  </div>
-                  {!isSignedIn ? (
-                    <div className='rounded-md border border-dashed border-line-strong bg-paper px-4 py-5 text-center text-[13px] text-muted'>
-                      <Link
-                        href='/login'
-                        className='font-medium text-brand no-underline hover:underline'
-                      >
-                        Sign in
-                      </Link>{" "}
-                      to join this team with your account.
+                  <div className='mb-6 flex gap-4 border-b border-line pb-6'>
+                    <div className='flex size-[52px] shrink-0 items-center justify-center rounded-[10px] border border-line bg-paper text-2xl'>
+                      {projectModalProject.icon}
                     </div>
-                  ) : (
-                    <form
-                      className='contents'
-                      onSubmit={joinForm.handleSubmit(async ({ role }) => {
-                        if (!projectModalProject) return;
-                        const mapped: TeamRole =
-                          role === "Domain Expert"
-                            ? "Domain"
-                            : (role as TeamRole);
-                        try {
-                          await teamM.mutateAsync({
-                            projectId: projectModalProject.id,
-                            role: mapped,
-                          });
-                          joinForm.reset();
-                        } catch (e) {
-                          window.alert(
-                            e instanceof Error
-                              ? e.message
-                              : "Could not join team.",
-                          );
-                        }
-                      })}
-                    >
-                      <h4 className='mb-3 text-[11px] font-semibold uppercase tracking-[0.09em] text-muted'>
-                        Join this team
-                      </h4>
-                      <input
-                        type='hidden'
-                        {...joinForm.register("role", {
-                          validate: (v) =>
-                            (typeof v === "string" && v.length > 0) ||
-                            "Pick a role",
-                        })}
-                      />
-                      <div className='mb-4 grid grid-cols-2 gap-2 sm:grid-cols-3'>
-                        {ROLE_OPTIONS.map((r) => (
-                          <button
-                            key={r}
-                            type='button'
-                            className={cn(
-                              "cursor-pointer rounded-md border-[1.5px] border-line bg-transparent px-2 py-2 font-sans text-xs font-medium transition-colors hover:border-ink",
-                              joinRoleWatch === r &&
-                                "border-ink bg-ink text-paper",
-                            )}
-                            onClick={() =>
-                              joinForm.setValue("role", r, {
-                                shouldValidate: true,
-                                shouldDirty: true,
-                              })
-                            }
+                    <div className='min-w-0 flex-1'>
+                      <h3
+                        id='project-detail-title'
+                        className='mb-1 font-display text-lg font-bold'
+                      >
+                        {projectModalProject.name}
+                      </h3>
+                      <div className='mb-2 flex w-full items-center justify-between gap-3 text-[10px]'>
+                        <span className='shrink-0 font-medium uppercase tracking-wider text-muted'>
+                          Posted {formatPostedAt(projectModalProject.postedAt)}
+                        </span>
+                        <div className='flex min-w-0 max-w-[55%] items-center justify-end gap-2 sm:max-w-[60%]'>
+                          <AuthorAvatar
+                            name={projectModalProject.authorName}
+                            color={projectModalProject.authorColor}
+                            image={projectModalProject.authorImage}
+                            size='md'
+                          />
+                          <span
+                            className='min-w-0 truncate text-right font-medium text-ink/80'
+                            title={projectModalProject.authorName}
                           >
-                            {r}
-                          </button>
-                        ))}
+                            {projectModalProject.authorName}
+                          </span>
+                        </div>
                       </div>
-                      {joinForm.formState.errors.role ? (
-                        <p className={cn(fieldError, "mb-3")} role='alert'>
-                          {joinForm.formState.errors.role.message}
+                      {projectModalProject.request?.trim() ? (
+                        <div className='mb-4 rounded-lg border border-line bg-paper px-4 py-3'>
+                          <h4 className='mb-1.5 text-[11px] font-semibold uppercase tracking-[0.09em] text-muted'>
+                            Request
+                          </h4>
+                          <p className='text-[13px] leading-relaxed text-ink'>
+                            {projectModalProject.request.trim()}
+                          </p>
+                        </div>
+                      ) : null}
+                      {projectModalProject.request?.trim() ? (
+                        <p className='mb-1 text-[10px] font-semibold uppercase tracking-wider text-muted'>
+                          Proposed approach
                         </p>
                       ) : null}
-                      {joinRoleWatch ? (
-                        <button
-                          type='submit'
-                          className={cn(
-                            "w-full cursor-pointer rounded-md border-none bg-ink py-3 font-sans text-[13px] font-medium text-paper transition-opacity",
-                            "hover:opacity-85 disabled:cursor-wait disabled:opacity-60",
-                          )}
-                          disabled={teamM.isPending}
-                          aria-busy={teamM.isPending}
+                      <p className='text-xs leading-snug text-muted'>
+                        {projectModalProject.description}
+                      </p>
+                      <div className='mt-2 flex flex-wrap gap-1.5'>
+                        <span className='rounded-full border border-line bg-transparent px-[7px] py-0.5 text-[9px] font-semibold uppercase tracking-wide text-muted'>
+                          {projectModalProject.category}
+                        </span>
+                        {projectModalProject.verified ? (
+                          <span className='inline-flex items-center gap-1 rounded-full border border-brand/20 bg-brand-soft px-2 py-0.5 text-[10px] font-semibold text-brand'>
+                            ✓ Verified
+                          </span>
+                        ) : null}
+                        {projectModalProject.pipelineStage ? (
+                          <span className='rounded-full border border-line bg-paper px-[7px] py-0.5 text-[9px] font-semibold uppercase tracking-wide text-muted'>
+                            {pipelineStageLabel(
+                              projectModalProject.pipelineStage,
+                            )}
+                          </span>
+                        ) : null}
+                      </div>
+                    </div>
+                  </div>
+                  {projectModalProject.criteria &&
+                  projectModalProject.criteria.length > 0 ? (
+                    <div className='border-b border-line'>
+                      <div className='mb-6 rounded-lg border border-line bg-paper px-5 py-4'>
+                        <h4 className='mb-3 text-[11px] font-semibold uppercase tracking-[0.09em] text-muted'>
+                          Acceptance Criteria
+                        </h4>
+                        <div className='flex flex-col gap-1.5'>
+                          {projectModalProject.criteria.map((c) => (
+                            <div
+                              key={c}
+                              className='flex gap-2 text-xs leading-snug text-ink'
+                            >
+                              <span className='mt-px shrink-0 text-[13px] text-brand'>
+                                ✓
+                              </span>
+                              {c}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  ) : null}
+                  <ProjectCommentsSection projectId={projectModalProject.id} />
+                  {showTeamJoin ? (
+                    <>
+                      <div className='mb-6'>
+                        <h4 className='mb-3 text-[11px] font-semibold uppercase tracking-[0.09em] text-muted'>
+                          Current Team ({projectModalProject.teams.length})
+                        </h4>
+                        {projectModalProject.teams.length > 0 ? (
+                          <div className='flex flex-col gap-2'>
+                            {projectModalProject.teams.map((m) => (
+                              <div
+                                key={m.userId}
+                                className='flex items-center justify-between rounded-md border border-line bg-paper px-3 py-2'
+                              >
+                                <div className='flex items-center gap-2'>
+                                  {m.image ? (
+                                    // eslint-disable-next-line @next/next/no-img-element -- remote Google avatars
+                                    <img
+                                      src={m.image}
+                                      alt=''
+                                      className='size-7 shrink-0 rounded-full object-cover'
+                                    />
+                                  ) : (
+                                    <div
+                                      className='flex size-7 shrink-0 items-center justify-center rounded-full text-[11px] font-bold text-white'
+                                      style={{ background: m.color }}
+                                    >
+                                      {initials(m.name)}
+                                    </div>
+                                  )}
+                                  <div>
+                                    <div className='text-[13px] font-medium'>
+                                      {m.name}
+                                    </div>
+                                    <div className='text-[11px] text-muted'>
+                                      {m.role}
+                                    </div>
+                                  </div>
+                                </div>
+                                <span
+                                  className={cn(
+                                    "rounded-full px-2 py-0.5 text-[10px] font-medium",
+                                    ROLE_TAG_TW[m.role] ?? ROLE_TAG_TW.Domain,
+                                  )}
+                                >
+                                  {m.role}
+                                </span>
+                              </div>
+                            ))}
+                          </div>
+                        ) : (
+                          <div className='rounded-md border border-dashed border-line-strong bg-paper px-6 py-6 text-center text-[13px] text-muted'>
+                            No team members yet. Be the first to join!
+                          </div>
+                        )}
+                      </div>
+                      {!isSignedIn ? (
+                        <div className='rounded-md border border-dashed border-line-strong bg-paper px-4 py-5 text-center text-[13px] text-muted'>
+                          <Link
+                            href='/login'
+                            className='font-medium text-brand no-underline hover:underline'
+                          >
+                            Sign in
+                          </Link>{" "}
+                          to join this team with your account.
+                        </div>
+                      ) : (
+                        <form
+                          className='contents'
+                          onSubmit={joinForm.handleSubmit(async ({ role }) => {
+                            if (!projectModalProject) return;
+                            const mapped: TeamRole =
+                              role === "Domain Expert"
+                                ? "Domain"
+                                : (role as TeamRole);
+                            try {
+                              await teamM.mutateAsync({
+                                projectId: projectModalProject.id,
+                                role: mapped,
+                              });
+                              joinForm.reset();
+                            } catch (e) {
+                              window.alert(
+                                e instanceof Error
+                                  ? e.message
+                                  : "Could not join team.",
+                              );
+                            }
+                          })}
                         >
-                          {teamM.isPending ? "Joining…" : "Join Team →"}
-                        </button>
-                      ) : null}
-                    </form>
-                  )}
+                          <h4 className='mb-3 text-[11px] font-semibold uppercase tracking-[0.09em] text-muted'>
+                            Join this team
+                          </h4>
+                          <input
+                            type='hidden'
+                            {...joinForm.register("role", {
+                              validate: (v) =>
+                                (typeof v === "string" && v.length > 0) ||
+                                "Pick a role",
+                            })}
+                          />
+                          <div className='mb-4 grid grid-cols-2 gap-2 sm:grid-cols-3'>
+                            {ROLE_OPTIONS.map((r) => (
+                              <button
+                                key={r}
+                                type='button'
+                                className={cn(
+                                  "cursor-pointer rounded-md border-[1.5px] border-line bg-transparent px-2 py-2 font-sans text-xs font-medium transition-colors hover:border-ink",
+                                  joinRoleWatch === r &&
+                                    "border-ink bg-ink text-paper",
+                                )}
+                                onClick={() =>
+                                  joinForm.setValue("role", r, {
+                                    shouldValidate: true,
+                                    shouldDirty: true,
+                                  })
+                                }
+                              >
+                                {r}
+                              </button>
+                            ))}
+                          </div>
+                          {joinForm.formState.errors.role ? (
+                            <p className={cn(fieldError, "mb-3")} role='alert'>
+                              {joinForm.formState.errors.role.message}
+                            </p>
+                          ) : null}
+                          {joinRoleWatch ? (
+                            <button
+                              type='submit'
+                              className={cn(
+                                "w-full cursor-pointer rounded-md border-none bg-ink py-3 font-sans text-[13px] font-medium text-paper transition-opacity",
+                                "hover:opacity-85 disabled:cursor-wait disabled:opacity-60",
+                              )}
+                              disabled={teamM.isPending}
+                              aria-busy={teamM.isPending}
+                            >
+                              {teamM.isPending ? "Joining…" : "Join Team →"}
+                            </button>
+                          ) : null}
+                        </form>
+                      )}
+                    </>
+                  ) : null}
                 </>
-              ) : null}
-              </>
               ) : null}
             </div>
           ) : null}

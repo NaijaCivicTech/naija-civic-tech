@@ -51,6 +51,17 @@ export type CivicProject = {
   request?: string | null;
 };
 
+/** Flat discussion comment on a project (public read; post requires sign-in). */
+export type ProjectComment = {
+  id: string;
+  body: string;
+  createdAt: string;
+  authorName: string;
+  authorColor: string;
+  authorImage?: string | null;
+  userId: string;
+};
+
 export type {
   CreateIdeaBody,
   CreateIdeaPayload,
