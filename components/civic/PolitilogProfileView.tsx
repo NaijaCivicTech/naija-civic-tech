@@ -24,7 +24,13 @@ import {
 } from "@/lib/politilog-timeline";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
+import {
+  useEffect,
+  useId,
+  useMemo,
+  useState,
+  useSyncExternalStore,
+} from "react";
 
 const PROFILE_GUIDE_STORAGE_KEY = "naijacivic:politilog-profile-guide";
 
@@ -49,6 +55,52 @@ function setProfileGuideHidden(hidden: boolean) {
   if (hidden) localStorage.setItem(PROFILE_GUIDE_STORAGE_KEY, "hidden");
   else localStorage.removeItem(PROFILE_GUIDE_STORAGE_KEY);
   for (const l of profileGuideListeners) l();
+}
+
+function PolitilogProfileBiography({ paragraphs }: { paragraphs: string[] }) {
+  const [expanded, setExpanded] = useState(false);
+  const bodyId = useId();
+  const needsToggle =
+    paragraphs.length > 1 ||
+    (paragraphs.length === 1 && paragraphs[0].length > 320);
+
+  return (
+    <section
+      className='rounded-2xl border-[1.5px] border-line bg-card p-6 shadow-[0_12px_40px_-28px_rgb(13_13_11/0.18)] sm:p-8'
+      aria-labelledby='politilog-about-h'
+    >
+      <h2
+        id='politilog-about-h'
+        className='font-display text-xl font-extrabold tracking-tight text-ink'
+      >
+        Biography
+      </h2>
+      <div
+        id={bodyId}
+        className={cn(
+          "mt-4 space-y-4 font-sans text-[14px] leading-[1.75] text-ink/90",
+          !expanded && paragraphs.length === 1 && needsToggle && "line-clamp-6",
+        )}
+      >
+        {(expanded || !needsToggle ? paragraphs : [paragraphs[0]]).map(
+          (paragraph, i) => (
+            <p key={i}>{paragraph}</p>
+          ),
+        )}
+      </div>
+      {needsToggle ? (
+        <button
+          type='button'
+          className='mt-3 cursor-pointer border-none bg-transparent p-0 font-sans text-[13px] font-bold text-brand underline decoration-brand/35 underline-offset-[3px] transition-colors hover:text-ink hover:decoration-ink/30'
+          aria-expanded={expanded}
+          aria-controls={bodyId}
+          onClick={() => setExpanded((v) => !v)}
+        >
+          {expanded ? "View less" : "View more"}
+        </button>
+      ) : null}
+    </section>
+  );
 }
 
 export function PolitilogProfileView({
@@ -231,22 +283,7 @@ export function PolitilogProfileView({
           </header>
 
           {bioParagraphs.length > 0 ? (
-            <section
-              className='rounded-2xl border-[1.5px] border-line bg-card p-6 shadow-[0_12px_40px_-28px_rgb(13_13_11/0.18)] sm:p-8'
-              aria-labelledby='politilog-about-h'
-            >
-              <h2
-                id='politilog-about-h'
-                className='font-display text-xl font-extrabold tracking-tight text-ink'
-              >
-                Biography
-              </h2>
-              <div className='mt-4 space-y-4 font-sans text-[14px] leading-[1.75] text-ink/90'>
-                {bioParagraphs.map((paragraph, i) => (
-                  <p key={i}>{paragraph}</p>
-                ))}
-              </div>
-            </section>
+            <PolitilogProfileBiography key={p.id} paragraphs={bioParagraphs} />
           ) : null}
 
           <PolitilogProfileTimeline politicianId={p.id} segments={timeline} />
