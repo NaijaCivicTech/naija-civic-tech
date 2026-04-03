@@ -212,7 +212,7 @@ export function DirectoryBoardSkeleton({
 export function ProjectDetailModalSkeleton() {
   return (
     <div aria-busy='true' aria-label='Loading project'>
-      <div className='mb-6 flex gap-4 border-b border-line pb-6'>
+      <div className='mb-6 flex flex-col md:flex-row gap-4 border-b border-line pb-6'>
         <div
           className={cn(
             "size-[52px] shrink-0 rounded-[10px] border border-line",
