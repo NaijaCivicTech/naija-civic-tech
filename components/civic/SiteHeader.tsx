@@ -299,7 +299,8 @@ export function SiteHeader() {
             className={
               session?.user
                 ? "flex w-auto shrink-0 justify-end"
-                : "flex w-44 shrink-0 justify-end lg:w-50"
+                : "flex shrink-0 justify-end"
+              // : "flex w-44 shrink-0 justify-end lg:w-50"
             }
           >
             {status === "loading" ? (
@@ -317,7 +318,7 @@ export function SiteHeader() {
                 >
                   Sign in
                 </Link>
-                <Link
+                {/* <Link
                   href='/register'
                   className={cn(
                     navLinkTopBase,
@@ -325,7 +326,7 @@ export function SiteHeader() {
                   )}
                 >
                   Register
-                </Link>
+                </Link> */}
               </div>
             )}
           </div>

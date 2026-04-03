@@ -285,10 +285,7 @@ export function CivicModals() {
                       github: data.github.trim(),
                       liveUrl: data.liveUrl.trim(),
                       ...(isSignedIn
-                        ? {
-                            ...(nameT ? { authorName: nameT } : {}),
-                            ...(emailT ? { authorEmail: emailT } : {}),
-                          }
+                        ? {}
                         : {
                             authorName: nameT,
                             authorEmail: emailT,
@@ -442,67 +439,58 @@ export function CivicModals() {
                 </div>
                 {isSignedIn ? (
                   <p className='mb-3 text-xs leading-relaxed text-muted'>
-                    We&apos;ll use your account name and email unless you
-                    override below.
+                    This listing will be attributed to your signed-in account.
                   </p>
                 ) : null}
-                <div className='mb-4 grid grid-cols-1 gap-3 sm:grid-cols-2'>
-                  <div>
-                    <label className={fieldLabel} htmlFor='s-author-name'>
-                      Your name
-                      {isSignedIn ? " (optional)" : ""}
-                    </label>
-                    <input
-                      id='s-author-name'
-                      className={fieldInput}
-                      placeholder='@handle or full name'
-                      autoComplete='name'
-                      {...listingForm.register("authorName", {
-                        validate: (v) => {
-                          if (isSignedIn) return true;
-                          return (
+                {!isSignedIn ? (
+                  <div className='mb-4 grid grid-cols-1 gap-3 sm:grid-cols-2'>
+                    <div>
+                      <label className={fieldLabel} htmlFor='s-author-name'>
+                        Your name
+                      </label>
+                      <input
+                        id='s-author-name'
+                        className={fieldInput}
+                        placeholder='@handle or full name'
+                        autoComplete='name'
+                        {...listingForm.register("authorName", {
+                          validate: (v) =>
                             (v?.trim()?.length ?? 0) > 0 ||
-                            "Your name is required"
-                          );
-                        },
-                      })}
-                    />
-                    {listingForm.formState.errors.authorName ? (
-                      <p className={fieldError} role='alert'>
-                        {listingForm.formState.errors.authorName.message}
-                      </p>
-                    ) : null}
-                  </div>
-                  <div>
-                    <label className={fieldLabel} htmlFor='s-author-email'>
-                      Email
-                      {isSignedIn ? " (optional)" : ""}
-                    </label>
-                    <input
-                      id='s-author-email'
-                      type='email'
-                      className={fieldInput}
-                      placeholder='you@example.com'
-                      autoComplete='email'
-                      {...listingForm.register("authorEmail", {
-                        validate: (v) => {
-                          const t = (v ?? "").trim();
-                          if (isSignedIn) {
-                            if (!t) return true;
+                            "Your name is required",
+                        })}
+                      />
+                      {listingForm.formState.errors.authorName ? (
+                        <p className={fieldError} role='alert'>
+                          {listingForm.formState.errors.authorName.message}
+                        </p>
+                      ) : null}
+                    </div>
+                    <div>
+                      <label className={fieldLabel} htmlFor='s-author-email'>
+                        Email
+                      </label>
+                      <input
+                        id='s-author-email'
+                        type='email'
+                        className={fieldInput}
+                        placeholder='you@example.com'
+                        autoComplete='email'
+                        {...listingForm.register("authorEmail", {
+                          validate: (v) => {
+                            const t = (v ?? "").trim();
+                            if (!t) return "Email is required";
                             return isValidEmail(t) || "Enter a valid email";
-                          }
-                          if (!t) return "Email is required";
-                          return isValidEmail(t) || "Enter a valid email";
-                        },
-                      })}
-                    />
-                    {listingForm.formState.errors.authorEmail ? (
-                      <p className={fieldError} role='alert'>
-                        {listingForm.formState.errors.authorEmail.message}
-                      </p>
-                    ) : null}
+                          },
+                        })}
+                      />
+                      {listingForm.formState.errors.authorEmail ? (
+                        <p className={fieldError} role='alert'>
+                          {listingForm.formState.errors.authorEmail.message}
+                        </p>
+                      ) : null}
+                    </div>
                   </div>
-                </div>
+                ) : null}
                 <div className='mb-4 rounded-md bg-brand-soft px-4 py-3 text-xs leading-relaxed text-brand'>
                   <strong>Verified badge criteria:</strong> Open source on
                   GitHub · Addresses a Nigerian problem · Has a working demo or
@@ -579,10 +567,7 @@ export function CivicModals() {
                       category: data.category.trim(),
                       ...(criteria.length > 0 ? { criteria } : {}),
                       ...(isSignedIn
-                        ? {
-                            ...(nameT ? { authorName: nameT } : {}),
-                            ...(emailT ? { authorEmail: emailT } : {}),
-                          }
+                        ? {}
                         : {
                             authorName: nameT,
                             authorEmail: emailT,
@@ -787,67 +772,58 @@ export function CivicModals() {
                 </div>
                 {isSignedIn ? (
                   <p className='mb-3 text-xs leading-relaxed text-muted'>
-                    We&apos;ll use your account name and email unless you
-                    override below.
+                    This idea will be attributed to your signed-in account.
                   </p>
                 ) : null}
-                <div className='mb-4 grid grid-cols-1 gap-3 sm:grid-cols-2'>
-                  <div>
-                    <label className={fieldLabel} htmlFor='i-author-name'>
-                      Your name
-                      {isSignedIn ? " (optional)" : ""}
-                    </label>
-                    <input
-                      id='i-author-name'
-                      className={fieldInput}
-                      placeholder='@handle or full name'
-                      autoComplete='name'
-                      {...ideaForm.register("authorName", {
-                        validate: (v) => {
-                          if (isSignedIn) return true;
-                          return (
+                {!isSignedIn ? (
+                  <div className='mb-4 grid grid-cols-1 gap-3 sm:grid-cols-2'>
+                    <div>
+                      <label className={fieldLabel} htmlFor='i-author-name'>
+                        Your name
+                      </label>
+                      <input
+                        id='i-author-name'
+                        className={fieldInput}
+                        placeholder='@handle or full name'
+                        autoComplete='name'
+                        {...ideaForm.register("authorName", {
+                          validate: (v) =>
                             (v?.trim()?.length ?? 0) > 0 ||
-                            "Your name is required"
-                          );
-                        },
-                      })}
-                    />
-                    {ideaForm.formState.errors.authorName ? (
-                      <p className={fieldError} role='alert'>
-                        {ideaForm.formState.errors.authorName.message}
-                      </p>
-                    ) : null}
-                  </div>
-                  <div>
-                    <label className={fieldLabel} htmlFor='i-author-email'>
-                      Email
-                      {isSignedIn ? " (optional)" : ""}
-                    </label>
-                    <input
-                      id='i-author-email'
-                      type='email'
-                      className={fieldInput}
-                      placeholder='you@example.com'
-                      autoComplete='email'
-                      {...ideaForm.register("authorEmail", {
-                        validate: (v) => {
-                          const t = (v ?? "").trim();
-                          if (isSignedIn) {
-                            if (!t) return true;
+                            "Your name is required",
+                        })}
+                      />
+                      {ideaForm.formState.errors.authorName ? (
+                        <p className={fieldError} role='alert'>
+                          {ideaForm.formState.errors.authorName.message}
+                        </p>
+                      ) : null}
+                    </div>
+                    <div>
+                      <label className={fieldLabel} htmlFor='i-author-email'>
+                        Email
+                      </label>
+                      <input
+                        id='i-author-email'
+                        type='email'
+                        className={fieldInput}
+                        placeholder='you@example.com'
+                        autoComplete='email'
+                        {...ideaForm.register("authorEmail", {
+                          validate: (v) => {
+                            const t = (v ?? "").trim();
+                            if (!t) return "Email is required";
                             return isValidEmail(t) || "Enter a valid email";
-                          }
-                          if (!t) return "Email is required";
-                          return isValidEmail(t) || "Enter a valid email";
-                        },
-                      })}
-                    />
-                    {ideaForm.formState.errors.authorEmail ? (
-                      <p className={fieldError} role='alert'>
-                        {ideaForm.formState.errors.authorEmail.message}
-                      </p>
-                    ) : null}
+                          },
+                        })}
+                      />
+                      {ideaForm.formState.errors.authorEmail ? (
+                        <p className={fieldError} role='alert'>
+                          {ideaForm.formState.errors.authorEmail.message}
+                        </p>
+                      ) : null}
+                    </div>
                   </div>
-                </div>
+                ) : null}
                 <button
                   type='submit'
                   className={cn(

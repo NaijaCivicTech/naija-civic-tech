@@ -60,6 +60,26 @@ function userIdsForProjectDocs(docs: Record<string, unknown>[]): string[] {
   return [...ids];
 }
 
+/** Public label: linked account profile name, else stored submission author. */
+function displayAuthorNameForDto(
+  ownerId: string | null,
+  storedAuthorName: string,
+  byId: Map<string, UserBrief>,
+): string {
+  const stored = storedAuthorName.trim();
+  if (!ownerId) return stored || "Member";
+  const u = byId.get(ownerId);
+  if (!u) return stored || "Member";
+  const n = typeof u.name === "string" ? u.name.trim() : "";
+  if (n) return n;
+  const em = typeof u.email === "string" ? u.email.trim() : "";
+  if (em.includes("@")) {
+    const local = em.split("@")[0]?.trim();
+    if (local) return local;
+  }
+  return stored || "Member";
+}
+
 function avatarColorForUserId(userId: string): string {
   let h = 0;
   for (let i = 0; i < userId.length; i++) {
@@ -201,10 +221,16 @@ async function docToProject(
       : null;
   const authorImage = imageFromUser ?? storedAuthorImage ?? null;
 
+  const authorNameForDisplay = displayAuthorNameForDto(
+    ownerId,
+    authorName,
+    byId,
+  );
+
   return {
     ...withoutNameTeamsVoters,
     id,
-    authorName,
+    authorName: authorNameForDisplay,
     authorColor,
     authorImage,
     postedAt,

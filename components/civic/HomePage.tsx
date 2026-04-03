@@ -29,13 +29,13 @@ export function HomePage() {
   return (
     <div className='flex min-h-0 flex-1 flex-col'>
       <div>
-        <section className='mx-auto w-full max-w-[1100px] px-10 pb-14 pt-20 max-md:px-5 max-md:pb-8 max-md:pt-10'>
+        <section className='mx-auto w-full max-w-[1200px] px-10 pb-14 pt-20 max-md:px-5 max-md:pb-8 max-md:pt-10'>
           <div className='mb-5 flex items-center gap-2 text-[10px] font-medium uppercase tracking-[0.15em] text-brand'>
             <span className='h-px w-[22px] bg-brand' aria-hidden />
             Nigerian Developer Movement
           </div>
           <h1 className='mb-6 max-w-[720px] font-display text-[clamp(40px,6vw,78px)] font-extrabold leading-none tracking-tight'>
-            Build the tools
+            Building the tools
             <br />
             <em className='not-italic text-brand'>Nigeria</em>{" "}
             <span className='relative inline-block after:absolute after:bottom-[3px] after:left-0 after:right-0 after:z-[-1] after:block after:h-[5px] after:-skew-x-[3deg] after:bg-sun'>
@@ -126,7 +126,7 @@ export function HomePage() {
 
         <MarqueeBand />
 
-        <section className='mx-auto max-w-[1100px] px-10 py-12 max-md:px-5'>
+        <section className='mx-auto max-w-[1200px] px-10 py-12 max-md:px-5'>
           <div className='mb-6 flex flex-wrap items-baseline justify-between gap-3'>
             <div>
               <h2 className='font-display text-[22px] font-extrabold tracking-tight'>
@@ -151,7 +151,7 @@ export function HomePage() {
           <DirectoryBoard previewMaxCards={DISCOVERY_LANDING_LIMIT} />
         </section>
 
-        <section className='mx-auto max-w-[1100px] px-10 py-12 max-md:px-5'>
+        <section className='mx-auto max-w-[1200px] px-10 py-12 max-md:px-5'>
           <div className='mb-10 text-center'>
             <h2 className='mb-2 font-display text-[clamp(22px,3vw,34px)] font-extrabold tracking-tight'>
               Two ways to contribute
@@ -250,7 +250,7 @@ export function HomePage() {
           </div>
         </section>
 
-        <section className='mx-auto max-w-[1100px] px-10 pb-12 pt-0 max-md:px-5'>
+        <section className='mx-auto max-w-[1200px] px-10 pb-12 pt-0 max-md:px-5'>
           <div className='mb-6 flex flex-wrap items-baseline justify-between gap-2'>
             <h2 className='font-display text-[22px] font-extrabold tracking-tight'>
               Active Pipeline
@@ -275,8 +275,8 @@ export function HomePage() {
 
         <div className='h-px bg-line' />
 
-        <section className='relative z-[1] bg-ink px-10 py-16 max-md:px-5 max-md:py-10'>
-          <div className='mx-auto grid max-w-[1100px] grid-cols-1 items-center gap-8 md:grid-cols-[1fr_auto]'>
+        <section className='relative z-1 bg-ink px-10 py-16 max-md:px-5 max-md:py-10'>
+          <div className='mx-auto grid max-w-[1200px] grid-cols-1 items-center gap-8 md:grid-cols-[1fr_auto]'>
             <div>
               <h2 className='mb-2 font-display text-[clamp(22px,4vw,40px)] font-extrabold leading-tight tracking-tight text-paper'>
                 Built something for Nigeria?

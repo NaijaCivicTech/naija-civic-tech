@@ -209,7 +209,7 @@ export function PipelineBoard({
     "w-full gap-3",
     fillViewport
       ? "flex min-h-0 max-h-[70dvh] flex-1 flex-col lg:grid lg:max-h-full lg:grid-cols-4 lg:grid-rows-1 lg:overflow-hidden"
-      : "grid grid-cols-1 items-start sm:grid-cols-2 lg:grid-cols-4",
+      : "grid grid-cols-1 items-stretch sm:grid-cols-2 lg:grid-cols-4",
   );
 
   return (
@@ -257,6 +257,7 @@ export function PipelineBoard({
               key={stage.key}
               className={cn(
                 "flex flex-col rounded-lg bg-paper2 p-4",
+                !fillViewport && "h-full min-h-0",
                 fillViewport &&
                   "min-h-0 max-h-[min(45dvh,80dvh)] shrink-0 sm:max-h-[min(50dvh,100dvh)] lg:h-full lg:max-h-none lg:overflow-hidden",
               )}
@@ -276,9 +277,9 @@ export function PipelineBoard({
               </div>
               <div
                 className={cn(
-                  "flex flex-col gap-2",
+                  "flex min-h-0 flex-1 flex-col gap-2",
                   fillViewport &&
-                    "scrollbar-none min-h-0 flex-1 overflow-y-auto overscroll-y-contain [-webkit-overflow-scrolling:touch]",
+                    "scrollbar-none overflow-y-auto overscroll-y-contain [-webkit-overflow-scrolling:touch]",
                 )}
               >
                 {items.map((p) => (
