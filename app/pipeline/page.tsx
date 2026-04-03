@@ -32,7 +32,7 @@ export default function PipelinePage() {
             + Add to Pipeline
           </button>
         </div>
-        <div className='min-h-0 flex-1 max-lg:max-h-dvh'>
+        <div className='min-h-0 flex-1 max-lg:max-h-[70dvh]'>
           <PipelineBoard
             fillViewport
             stageCounts={stats?.pipelineStageCounts}

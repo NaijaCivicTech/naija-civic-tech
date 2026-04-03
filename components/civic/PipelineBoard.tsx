@@ -218,7 +218,7 @@ export function PipelineBoard({
   const gridClass = cn(
     "w-full gap-3",
     fillViewport
-      ? "flex min-h-0 max-h-[min(90dvh,calc(100dvh-5rem))] flex-1 flex-col lg:grid lg:max-h-full lg:grid-cols-4 lg:grid-rows-1 lg:overflow-hidden"
+      ? "flex min-h-0 flex-1 flex-col lg:grid lg:grid-cols-4 lg:grid-rows-1 lg:overflow-hidden"
       : "grid grid-cols-1 items-stretch sm:grid-cols-2 lg:grid-cols-4",
   );
 
@@ -227,7 +227,7 @@ export function PipelineBoard({
       className={cn(
         "w-full min-h-0",
         fillViewport &&
-          "flex h-full min-h-0 max-h-[min(90dvh,calc(100dvh-5rem))] flex-1 flex-col lg:max-h-full",
+          "flex h-full max-h-[90dvh] lg:max-h-[70dvh] min-h-0 flex-1 flex-col",
       )}
     >
       {!hideSort ? (
@@ -288,10 +288,9 @@ export function PipelineBoard({
                       : "max-lg:shrink-0",
                   ),
                 fillViewport &&
-                  "min-h-0 shrink-0 lg:h-full lg:max-h-none lg:overflow-hidden",
+                  "min-h-0 lg:h-full lg:max-h-none lg:overflow-hidden",
                 fillViewport &&
-                  openMobile &&
-                  "max-lg:max-h-[min(64dvh,92dvh)] sm:max-lg:max-h-[min(70dvh,94dvh)]",
+                  (openMobile ? "max-lg:min-h-0 max-lg:flex-1" : "shrink-0"),
               )}
             >
               <div className='mb-4 hidden shrink-0 items-center justify-between gap-2 lg:flex'>
