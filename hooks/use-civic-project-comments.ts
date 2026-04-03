@@ -33,6 +33,9 @@ export function usePostProjectCommentMutation(projectId: string | null) {
         void queryClient.invalidateQueries({
           queryKey: civicProjectKeys.comments(projectId),
         });
+        void queryClient.invalidateQueries({
+          queryKey: civicProjectKeys.all,
+        });
       }
     },
   });

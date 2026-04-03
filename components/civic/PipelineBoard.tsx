@@ -123,24 +123,34 @@ function PipelineCard({
         <span className='inline-flex shrink-0 items-center rounded-full border border-line bg-paper px-[7px] py-0.5 text-[10px] font-medium uppercase tracking-wide text-muted'>
           {p.category}
         </span>
-        <button
-          type='button'
-          disabled={!canVote}
-          title={canVote ? undefined : "Sign in to vote"}
-          className={cn(
-            "shrink-0 rounded border border-line bg-transparent px-[7px] py-0.5 font-sans text-[11px] font-semibold text-muted transition-colors",
-            canVote && "hover:border-flame hover:text-flame",
-            !canVote && "cursor-not-allowed opacity-60",
-            voted &&
-              canVote &&
-              "border-flame bg-flame text-white hover:bg-flame/90 hover:text-white",
-          )}
-          onClick={() => {
-            if (canVote) onVote();
-          }}
-        >
-          ▲ {p.votes}
-        </button>
+        <div className='flex shrink-0 items-center gap-1.5'>
+          <span
+            className='rounded border border-line bg-transparent px-[7px] py-0.5 font-sans text-[11px] font-semibold tabular-nums text-muted'
+            title='Comments on this project'
+            aria-label={`${p.commentCount ?? 0} comment${(p.commentCount ?? 0) === 1 ? "" : "s"}`}
+          >
+            <span aria-hidden>💬</span>{" "}
+            <span className='tabular-nums'>{p.commentCount ?? 0}</span>
+          </span>
+          <button
+            type='button'
+            disabled={!canVote}
+            title={canVote ? undefined : "Sign in to vote"}
+            className={cn(
+              "shrink-0 rounded border border-line bg-transparent px-[7px] py-0.5 font-sans text-[11px] font-semibold text-muted transition-colors",
+              canVote && "hover:border-flame hover:text-flame",
+              !canVote && "cursor-not-allowed opacity-60",
+              voted &&
+                canVote &&
+                "border-flame bg-flame text-white hover:bg-flame/90 hover:text-white",
+            )}
+            onClick={() => {
+              if (canVote) onVote();
+            }}
+          >
+            ▲ {p.votes}
+          </button>
+        </div>
       </div>
     </div>
   );

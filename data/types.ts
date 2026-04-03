@@ -49,6 +49,8 @@ export type CivicProject = {
   criteria?: string[];
   postedAt: string;
   request?: string | null;
+  /** Populated on list endpoints; total public comments on this project. */
+  commentCount?: number;
 };
 
 /** Flat discussion comment on a project (public read; post requires sign-in). */

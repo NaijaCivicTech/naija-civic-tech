@@ -7,7 +7,7 @@ import type {
 import { COLOR_POOL } from "@/data/projects";
 import { avatarColorFromSeed } from "@/lib/civic-utils";
 import { connectMongoose } from "@/lib/mongoose";
-import { ProjectModel, UserModel } from "@/lib/models";
+import { ProjectCommentModel, ProjectModel, UserModel } from "@/lib/models";
 import mongoose from "mongoose";
 
 const TEAM_ROLES: TeamRole[] = [
@@ -156,6 +156,7 @@ async function docToProject(
   doc: Record<string, unknown>,
   userMap?: Map<string, UserBrief>,
   viewerUserId?: string | null,
+  commentCount?: number,
 ): Promise<CivicProject> {
   const raw = doc._id;
   const postedAt = postedAtIsoFromId(raw);
@@ -236,7 +237,41 @@ async function docToProject(
     postedAt,
     teams,
     ...(viewerUserId != null ? { viewerHasVoted } : {}),
+    ...(commentCount !== undefined ? { commentCount } : {}),
   } as CivicProject;
+}
+
+async function commentCountsForProjectDocs(
+  docs: Record<string, unknown>[],
+): Promise<Map<string, number>> {
+  const map = new Map<string, number>();
+  const oids: mongoose.Types.ObjectId[] = [];
+  for (const d of docs) {
+    const raw = d._id;
+    if (raw instanceof mongoose.Types.ObjectId) {
+      oids.push(raw);
+    } else if (
+      typeof raw === "string" &&
+      mongoose.Types.ObjectId.isValid(raw)
+    ) {
+      oids.push(new mongoose.Types.ObjectId(raw));
+    }
+  }
+  if (oids.length === 0) return map;
+  await connectMongoose();
+  type AggRow = { _id: mongoose.Types.ObjectId; c: number };
+  const rows = await ProjectCommentModel.aggregate<AggRow>([
+    { $match: { projectId: { $in: oids } } },
+    { $group: { _id: "$projectId", c: { $sum: 1 } } },
+  ]).exec();
+  for (const row of rows) {
+    const id =
+      row._id instanceof mongoose.Types.ObjectId
+        ? row._id.toHexString()
+        : String(row._id);
+    map.set(id, row.c);
+  }
+  return map;
 }
 
 export const PUBLIC_PROJECT_FILTER = {
@@ -517,10 +552,26 @@ export async function listProjectsPage(
   const userMap = await fetchUserMap(
     userIdsForProjectDocs(pageDocs as Record<string, unknown>[]),
   );
+  const commentCountMap =
+    scope === "pipeline"
+      ? await commentCountsForProjectDocs(pageDocs as Record<string, unknown>[])
+      : null;
   const projects = await Promise.all(
-    pageDocs.map((d) =>
-      docToProject(d as Record<string, unknown>, userMap, viewerUserId ?? null),
-    ),
+    pageDocs.map((d) => {
+      const rawId = (d as Record<string, unknown>)._id;
+      const hexId =
+        rawId instanceof mongoose.Types.ObjectId
+          ? rawId.toHexString()
+          : String(rawId ?? "");
+      const cc =
+        commentCountMap != null ? (commentCountMap.get(hexId) ?? 0) : undefined;
+      return docToProject(
+        d as Record<string, unknown>,
+        userMap,
+        viewerUserId ?? null,
+        cc,
+      );
+    }),
   );
 
   let nextCursor: string | null = null;
