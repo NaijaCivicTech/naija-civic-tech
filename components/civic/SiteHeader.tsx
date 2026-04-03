@@ -92,7 +92,7 @@ function DesktopAccountMenu({
     <div className='relative hidden md:flex md:items-center' ref={wrapRef}>
       <button
         type='button'
-        className='flex cursor-pointer items-center rounded-full border-none bg-transparent p-0 py-2 ring-offset-2 ring-offset-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sun'
+        className='flex cursor-pointer h-[27px] items-center rounded-full border-none bg-transparent p-0 py-2 ring-offset-2 ring-offset-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sun'
         aria-expanded={open}
         aria-haspopup='menu'
         aria-label='Account menu'
@@ -193,14 +193,6 @@ export function SiteHeader() {
         )}
       >
         Sign in
-      </span>
-      <span
-        className={cn(
-          navLinkTopBase,
-          "pointer-events-none select-none text-transparent",
-        )}
-      >
-        Register
       </span>
     </div>
   );
