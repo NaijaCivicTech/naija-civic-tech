@@ -55,6 +55,21 @@ export function patchProjectVotesInCaches(
     if (
       typeof old === "object" &&
       old !== null &&
+      "projects" in old &&
+      Array.isArray((old as ProjectsListPageDto).projects) &&
+      !("pages" in old)
+    ) {
+      const dto = old as ProjectsListPageDto;
+      return {
+        ...dto,
+        projects: dto.projects.map((p) =>
+          applyVotePatch(p, projectId, votes, viewerHasVoted),
+        ),
+      };
+    }
+    if (
+      typeof old === "object" &&
+      old !== null &&
       "id" in old &&
       (old as CivicProject).id === projectId
     ) {
@@ -80,6 +95,18 @@ export function findProjectInCaches(
     if (data == null || isStatsPayload(data)) continue;
     if (Array.isArray(data)) {
       const hit = (data as CivicProject[]).find((p) => p.id === projectId);
+      if (hit) return hit;
+    }
+    if (
+      typeof data === "object" &&
+      data !== null &&
+      "projects" in data &&
+      Array.isArray((data as ProjectsListPageDto).projects) &&
+      !("pages" in data)
+    ) {
+      const hit = (data as ProjectsListPageDto).projects.find(
+        (p) => p.id === projectId,
+      );
       if (hit) return hit;
     }
     if (
