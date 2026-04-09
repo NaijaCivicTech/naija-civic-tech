@@ -261,7 +261,7 @@ export function DirectoryBoard({ previewMaxCards }: DirectoryBoardProps = {}) {
                     color={t.authorColor}
                     image={t.authorImage}
                   />
-                  <span title={t.authorName} className='truncate max-w-[60px]'>{t.authorName}</span>
+                  <span>{t.authorName}</span>
                 </div>
                 <div className='flex flex-wrap items-center gap-2'>
                   <div className='flex gap-2'>
