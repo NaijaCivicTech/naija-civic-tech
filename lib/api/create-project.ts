@@ -71,6 +71,31 @@ function assertMaxLen(field: string, value: string, max: number) {
   }
 }
 
+function assertValidUrl(
+  field: string,
+  value: string,
+  requireGithub = false,
+) {
+  if (!value) return;
+  try {
+    const u = new URL(value);
+    const p = u.protocol.toLowerCase();
+    if (p !== "http:" && p !== "https:") {
+      throw new Error("invalid protocol");
+    }
+    if (requireGithub) {
+      const host = u.hostname.toLowerCase();
+      if (!host.endsWith("github.com")) {
+        throw new Error("not github.com");
+      }
+    }
+  } catch (e) {
+    throw new Error(
+      `${field} must be a valid http(s) URL${requireGithub ? " pointing to github.com" : ""}`,
+    );
+  }
+}
+
 function parseCriteriaList(raw: unknown): string[] {
   if (raw == null) return [];
   if (!Array.isArray(raw)) return [];
@@ -116,6 +141,8 @@ export function parseCreateListingBody(body: unknown): CreateListingBody {
   assertMaxLen("Description", description, MAX_DESCRIPTION);
   assertMaxLen("GitHub URL", github, MAX_URL);
   assertMaxLen("Live URL", liveUrl, MAX_URL);
+  assertValidUrl("GitHub URL", github, true);
+  assertValidUrl("Live URL", liveUrl, false);
   const authorName =
     typeof o.authorName === "string" ? o.authorName.trim() : undefined;
   const authorEmail =
